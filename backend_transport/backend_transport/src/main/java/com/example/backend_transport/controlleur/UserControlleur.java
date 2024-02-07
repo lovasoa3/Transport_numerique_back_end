@@ -1,8 +1,7 @@
 package com.example.backend_transport.controlleur;
 
-import ch.qos.logback.core.model.Model;
+import org.springframework.ui.Model;
 import com.example.backend_transport.model.Users;
-import com.example.backend_transport.repository.UsersRepository;
 import com.example.backend_transport.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -10,24 +9,34 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
-@RestController
+
+@Controller
 @CrossOrigin
 public class UserControlleur {
     @Autowired
-    private UsersRepository repository;
-    @Autowired
     private UserService userService;
+    @GetMapping("/")
+    public String register(@ModelAttribute Users users, Model model){
+        System.out.println(users.toString());
+      return "register";
+     }
+    @GetMapping("/listUsers")
+    public String allListUsers(Model model){
+        List<Users> listUsers = userService.listUsers();
+        model.addAttribute("listUsers", listUsers);
+        return "listUsers";
+    }
+    @GetMapping("/listUsers/{id}")
+    public String oneUsers(@PathVariable Integer id , Model model){
+        Optional<Users> oneUser=userService.oneUser(id);
+        model.addAttribute("oneUsers",oneUser);
+        return "listUsers";
+    }
+    @PostMapping("/registerUser")
+    public String regiserUser(@ModelAttribute("users") Users users){
+        System.out.println(users);
+        userService.registreUser(users);
+        return "home" ;
+  }
 
-    @GetMapping("/users")
-    public List<Users> getAllUser(){
-        return userService.getAllUser();
-    }
-    @GetMapping("/users/{id}")
-    public Optional<Users> getOneUser(@PathVariable int id){
-        return userService.getOneUser(id);
-    }
-    @PostMapping("/users")
-    public List<Users> insertUser(@RequestBody Users user ){
-        return userService.saveAlls(user);
-    }
 }
