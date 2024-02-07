@@ -9,21 +9,17 @@ import java.io.Serializable;
 @ToString
 @EqualsAndHashCode
 @Entity
-@Table(name = "users")
 public class Users implements Serializable {
     @Id
     @Column(name = "id_user",nullable = false)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id_user;
 
     @Column(name = "name",nullable = false,length = 255)
     private String name;
 
-    @Column(name = "email",nullable = false,length = 255)
+    @Column(name = "email",unique = true,length = 255)
     private String email;
-
-    @Column(name = "gender",nullable = false,length = 255)
-    private String gender;
 
     @Column(name = "numero",nullable = false,length = 20)
     private String numero;
@@ -33,4 +29,7 @@ public class Users implements Serializable {
 
     @Column(name = "adresse",nullable = false,length = 200)
     private String adresse;
+
+    @Column(name = "gender",nullable = false,length = 10)
+    private String gender;
 }
